@@ -12,7 +12,7 @@ if filename.endswith(".txt"):
 if filename.startswith("raw/"):
     filename = filename[4:]
 
-with open(f"raw/{filename}.txt", "r", encoding="utf-8") as f:
+with open(f"data/raw/{filename}.txt", "r", encoding="utf-8") as f:
     raw_text = f.read()
 
     lines = raw_text.splitlines()
@@ -30,5 +30,5 @@ with open(f"raw/{filename}.txt", "r", encoding="utf-8") as f:
 
     lines = lines[:i] # Cut off everything after the end
 
-    with open(f"processed/{filename}_processed.txt", "w", encoding="utf-8") as outfile:
+    with open(f"data/processed/{filename}_processed.txt", "w", encoding="utf-8") as outfile:
         outfile.write("\n".join(lines))
