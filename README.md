@@ -1,5 +1,12 @@
 Transformer project in progress...
 
+Steps
+- Gather and process training data (Done)
+- Work on tokenizing the characters (Done)
+- Embedding + Positional Layer (Done)
+- Attention Layer (In progress)
+- ? (next)
+
 Credits:
 - Project Gutenberg for ebook files (training data)
 - Books
