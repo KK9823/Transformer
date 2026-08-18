@@ -4,8 +4,10 @@ Steps
 - Gather and process training data (Done)
 - Work on tokenizing the characters (Done)
 - Embedding + Positional Layer (Done)
-- Attention Layer (In progress)
-- ? (next)
+- Attention Layer (Done)
+- Feed forward network + transformer block (Done)
+- Transformer class (Done)
+- Write training scripts and start training the model (?)
 
 Credits:
 - Project Gutenberg for ebook files (training data)
