@@ -1,14 +1,16 @@
 import torch
-from models.transformer_block import TransformerBlock
+from models.transformer import Transformer
 import config
 
-block = TransformerBlock(
-    d_model=config.d_model,
-    n_heads=config.n_heads,
-    block_size=config.block_size
+transformer = Transformer(
+    config.vocab_size,
+    config.d_model,
+    config.n_heads,
+    config.n_layers,
+    config.block_size
 )
 
-x = torch.randn(2, config.block_size, config.d_model)  # (batch, block, d_model)
-out = block(x)
 
-print(out.shape)
+idx = torch.randint(0, config.vocab_size, (2, config.block_size))
+logits = transformer(idx)
+print(logits.shape)  # should be (2, block_size, vocab_size)
