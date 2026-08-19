@@ -6,3 +6,4 @@ n_layers = 4                # Amount of times the transformer block is run
 dropout = 0.1               # random dropout
 batch_size = 64             # batch size for training
 learning_rate = 3e-4        # how much gradients change the model in training
+device = "cuda"

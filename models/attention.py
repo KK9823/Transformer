@@ -37,7 +37,9 @@ class Head(nn.Module):
 
         # Apply causal mask
         # mask: (T, T) → broadcast to (B, T, T)
-        scores = scores.masked_fill(self.mask == 0, float('-inf'))
+        seq_len = x.size(1)
+        mask = torch.tril(torch.ones(seq_len, seq_len, device=x.device))
+        scores = scores.masked_fill(mask == 0, float('-inf'))
 
         # Softmax → attention weights
         weights = F.softmax(scores, dim=-1)

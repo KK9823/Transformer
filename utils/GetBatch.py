@@ -1,6 +1,8 @@
 import torch
 
 # Takes the data source and then generates a random batch from the source
+# Returns: x - input batch (batch_size, block_size)
+#          y - expected output batch (batch_size, block_size)
 def get_batch(data, block_size, batch_size):
     n = len(data)
 
