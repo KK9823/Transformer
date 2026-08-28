@@ -13,8 +13,9 @@ def compute_loss(logits, y):
     return torch.nn.functional.cross_entropy(logits, targets)
 
 # Load the data
-train_data = torch.load("data/train.pt")
-val_data = torch.load("data/val.pt")
+data = torch.load("data/data.pt")
+
+option = input("Load an existing model?: ")
 
 # Create the model
 model = Transformer(
@@ -26,37 +27,66 @@ model = Transformer(
 )
 model.to(config.device)
 
+if option.lower() == "no" or option.lower() == "n":
+    start_step = 0
+
+else:
+    name = input("Enter model name to load (exclude .pt): ")
+    checkpoint = torch.load(f"{name}.pt", map_location=config.device)
+
+    model.load_state_dict(checkpoint['model'])
+
+    optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)
+    optimizer.load_state_dict(checkpoint['optimizer'])
+
+    start_step = checkpoint['step']
+
 # Optimizer
 optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)
 
-# Training
-max_steps = 5000
-eval_interval = 200
+# Separate the data into training and evaluation
+n = len(data)
+positions = torch.arange(0, n - config.block_size - 1)
+positions = positions[torch.randperm(len(positions))]
 
-for step in range(max_steps):
+# Basically shuffle all the possible start positions and group most into training and rest into evaluation
+split = int(0.9 * len(positions))
+train_positions = positions[:split]
+val_positions   = positions[split:]
 
-    x,y = get_batch(train_data, config.block_size, config.batch_size)
-    x = x.to(config.device)
-    y = y.to(config.device)
+try:
+    for step in range(start_step, config.max_steps):
 
-    logits = model(x)
-    loss = compute_loss(logits, y)
+        x,y = get_batch(data, train_positions, config.block_size, config.batch_size)
+        x = x.to(config.device)
+        y = y.to(config.device)
 
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
+        logits = model(x)
+        loss = compute_loss(logits, y)
 
-    if step % 50 == 0:
-        print(f"step {step} | train loss {loss.item():.4f}")
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
 
-    if step % eval_interval == 0:
-        with torch.no_grad():
-            x, y = get_batch(val_data, config.block_size, config.batch_size)
-            x = x.to(config.device)
-            y = y.to(config.device)
-            logits_val = model(x)
-            val_loss = compute_loss(logits_val, y)
-            print(f"step {step} | val loss {val_loss.item():.4f}")
+        if step % 50 == 0:
+            print(f"step {step} | train loss {loss.item():.4f}")
 
-# Save
+        if step % config.eval_interval == 0:
+            with torch.no_grad():
+                x, y = get_batch(data, val_positions, config.block_size, config.batch_size)
+                x = x.to(config.device)
+                y = y.to(config.device)
+                logits_val = model(x)
+                val_loss = compute_loss(logits_val, y)
+                print(f"step {step} | val loss {val_loss.item():.4f}")
+
+except KeyboardInterrupt:
+    print("Interrupted. Saving the model...")
+    torch.save({
+        'model': model.state_dict(),
+        'optimizer': optimizer.state_dict(),
+        'step': step,
+    }, f"checkpoint_{step}.pt")
+    print(f"Model Saved as checkpoint_{step}.pt")
+
 torch.save(model.state_dict(), "model.pt")

@@ -24,28 +24,30 @@ model.load_state_dict(torch.load("model.pt"))
 model.eval()
 model.to("cuda")
 
-prompt = input("Enter prompt: ")
-# idx : (1, prompt length)
-idx = torch.tensor([tokenizer.encode(prompt)], dtype=torch.long).to("cuda")
+while True:
+    prompt = input("Enter prompt: ")
+    length = int(input("Enter length of the output (characters): "))
+    # idx : (1, prompt length)
+    idx = torch.tensor([tokenizer.encode(prompt)], dtype=torch.long).to("cuda")
 
-for _ in range(200):  # generate 200 characters
-    # If sequence is longer than block_size, crop it
-    idx_cond = idx[:, -config.block_size:]
+    for _ in range(length):  # generate 200 characters
+        # If sequence is longer than block_size, crop it
+        idx_cond = idx[:, -config.block_size:]
 
-    # Forward pass
-    logits = model(idx_cond)
+        # Forward pass
+        logits = model(idx_cond)
 
-    # Get logits for the last position
-    next_logits = logits[:, -1, :]  # (1, vocab_size)
+        # Get logits for the last position
+        next_logits = logits[:, -1, :]  # (1, vocab_size)
 
-    # Convert to probabilities
-    probs = torch.softmax(next_logits, dim=-1)
+        # Convert to probabilities
+        probs = torch.softmax(next_logits, dim=-1)
 
-    # Sample from the distribution
-    next_token = torch.multinomial(probs, num_samples=1)
+        # Sample from the distribution
+        next_token = torch.multinomial(probs, num_samples=1)
 
-    # Append to sequence
-    idx = torch.cat([idx, next_token], dim=1)
+        # Append to sequence
+        idx = torch.cat([idx, next_token], dim=1)
 
-output_text = tokenizer.decode(idx[0].tolist())
-print(output_text)
+    output_text = tokenizer.decode(idx[0].tolist())
+    print(output_text)

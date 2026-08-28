@@ -7,7 +7,8 @@ Steps
 - Attention Layer (Done)
 - Feed forward network + transformer block (Done)
 - Transformer class (Done)
-- Write training scripts and start training the model (?)
+- Write training scripts and start training the model (Done)
+- Start Tweaking Hyperparameters for better performance (In progress)
 
 Credits:
 - Project Gutenberg for ebook files (training data)
