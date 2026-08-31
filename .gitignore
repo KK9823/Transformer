@@ -1,5 +1,6 @@
 .idea
 .venv
+__pycache__/*
 models/__pycache__/*
 model.pt
 checkpoint_*.pt
