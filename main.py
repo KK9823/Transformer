@@ -22,7 +22,7 @@ model = Transformer(
 
 model.load_state_dict(torch.load("model.pt"))
 model.eval()
-model.to("cuda")
+model.to(config.device)
 
 while True:
     prompt = input("Enter prompt: ")
