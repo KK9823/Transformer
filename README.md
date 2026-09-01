@@ -21,6 +21,13 @@ How to use
   - Run main.py with "python main.py" (main cannot be ran without a model.pt)
   - You can enter a prompt which the model will attempt to continue (Ex: "Once upon a time", "I woke up and found", etc.)
   - You can then enter the amount of characters the model will generate.
+- How do I change the training data?
+  - If you are getting ebooks from project gutenberg, you can put the raw text file into data/raw and use CleanTxtFile.txt to clean it and put it into data/processed
+  - Otherwise, you will have to clean the file yourself so that it only contains the data that should be used to train, and put the file into data/processed
+  - After you have your text files in data/processed, you can run the Combine.py file to combine them all into one file, it will appear as data/combined.txt
+  - Or you can do all the data processing/cleaning yourself and just put it in data/combined.txt, what matters is that all the training text is there.
+  - After that, run TokenizeAndSplit.py to process the data into data/data.pt so that it can be used
+  - Once you have your data/data.pt, the data side of things is all done and you can go back to training.
 
 Credits:
 - Project Gutenberg for ebook files (training data)
