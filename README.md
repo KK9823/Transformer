@@ -17,6 +17,7 @@ How to use
   - IMPORTANT NOTE: Do not change the hyperparameters while you are saving and loading checkpoints. This may cause unexpected errors.
   - If you want to load and continue training, run train.py again, say yes to "Load a model?" and enter the filename (checkpoint_n.pt) when it asks
   - When the model finishes training, it will be saved in a file called model.pt
+  - You can also test your checkpoints out. Run CheckpointToModel.py and it can turn a checkpoint_n.pt into model.pt so that it can be used by main.py
 - After you have a model.pt, you can run main.py and start prompting
   - Run main.py with "python main.py" (main cannot be ran without a model.pt)
   - You can enter a prompt which the model will attempt to continue (Ex: "Once upon a time", "I woke up and found", etc.)

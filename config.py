@@ -9,7 +9,7 @@ batch_size = 64             # batch size for training
 learning_rate = 6e-4        # how much gradients change the model in training
 
 # Training
-max_steps = 5_000            # How many steps in total the model will be trained
+max_steps = 20_000            # How many steps in total the model will be trained
 eval_interval = 200         # The model will be evaluated every eval_interval
 
 # Use "cuda" for Nvidia gpu, "mps" for Apple Silicon, or "cpu" for CPU
